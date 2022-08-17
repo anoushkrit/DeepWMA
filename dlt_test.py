@@ -26,6 +26,8 @@ if CPU:
 
     num_cores = 4
 
+    # protocol message for Tensorflow
+
     config = ConfigProto(intra_op_parallelism_threads=num_cores,
                             inter_op_parallelism_threads=num_cores,
                             allow_soft_placement=True,
@@ -101,6 +103,7 @@ if not os.path.exists(args.inputFeat):
 if args.inputLabel is None:
     print(script_name, "No input label is provided. Will perform prediction only.")
 elif not os.path.exists(args.inputLabel):
+  
     print(script_name, "Error: Input label ", args.inputLabel, "does not exist.")
     exit()
 
@@ -160,7 +163,7 @@ if params['bilateral_feature']:
 
 # Perform predition of multiple tracts
 
-print('')
+print('') 
 print('===================================')
 print('')
 print(script_name, 'Start multi-tract prediction.')
