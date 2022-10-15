@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument(
     'inputVTK',
-    help='input tractography data as vtkPolyData file(s).')
+    help='input tractography data as vtkPolyData file(s).') 
 parser.add_argument(
     'outputDir',
     help='The output directory should be a new empty directory. It will be created if needed.')
@@ -42,6 +42,7 @@ parser.add_argument(
 parser.add_argument(
     '-groundTruthLabel', action="store", type=str,
     help='Path to the ground truth label file. Should be provided when downsample is used.')
+    # what does downsample do? 
 
 args = parser.parse_args()
 

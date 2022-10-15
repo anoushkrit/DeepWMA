@@ -227,7 +227,7 @@ if args.tractVTKfile is not None:
 
     for t_idx in range(len(pd_t_list)):
         pd_t = pd_t_list[t_idx]
-
+    
         if y_names_in_model is not None:
             fname_t = os.path.join(output_tract_folder, y_names_in_model[t_idx].decode('UTF-8') + '.vtp')
         else:

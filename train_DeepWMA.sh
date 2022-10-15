@@ -1,20 +1,21 @@
-# prerequisite
-
-# 1. Install WMA package (https://github.com/SlicerDMRI/whitematteranalysis).
-# 2. Istall 3D Slicer (https://www.slicer.org) and SlicerDMRI (http://dmri.slicer.org).
-# 2. Download `SegModels.zip` (https://github.com/zhangfanmark/DeepWMA/releases) to the current folder, and `tar -xzvf SegModels.zip`
-# 3. Download `TestData.zip` (https://github.com/zhangfanmark/DeepWMA/releases) to the current folder, and `tar -xzvf TestData.zip`
-
-# TODO: change "BRAINSFitCLI" and "Slicer" to your Slicer path
 
 BRAINSFitCLI=/home/ang/Documents/Slicer-5.0.2/lib/Slicer-5.0/cli-modules/BRAINSFit
 Slicer=/home/ang/Documents/Slicer-5.0.2/Slicer
-# BRAINSFitCLI=/home/victor/alarge/Softwares/Slicer-4.10.2-linux-amd64/lib/Slicer-4.10/cli-modules/BRAINSFit
-# Slicer=/home/victor/alarge/Softwares/Slicer-4.10.2-linux-amd64/Slicer
-
-BRAINSFitCLI=/home/ang/Documents/Slicer-5.0.2/lib/Slicer-5.0/cli-modules/BRAINSFit
-# atlas_T2=./SegModels/100HCP-population-mean-T2.nii.gz
 atlas_T2 = /home/ang/Documents/GitHub/DeepWMA/atlas/100HCP-population-mean-T2.nii.gz
+
+# Training the Model
+# Input VTK file
+train_data=/home/ang/Documents/GitHub/WMA/WMA_tutorial_data/example-UKF-data.vtk
+
+
+# GroundTruthFIle
+
+
+# mean b0 subject specific 
+subject_b0=${input_folder}/${subject_ID}-dwi_meanb0.nrrd
+
+
+
 
 # Testing this pretrained model
 CNN_model_folder=./SegModels/CNN/
