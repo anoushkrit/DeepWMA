@@ -1,3 +1,8 @@
 *.pyc
 TestData*/
 SegModels*/
+
+*.vtp
+*.h5
+*.tfm
+*.vtk

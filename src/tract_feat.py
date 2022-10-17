@@ -663,6 +663,10 @@ def combine_truepositive_and_falsepositive(y_data, y_names, y_validation=None, v
 
 
 def bilateralize_feature(y_data, y_names, y_validation=None, verbose=False):
+    """Combining left part and right part of the tracts (where left and right mean the brain hemispheres)
+    """
+    # y_label: numbers associated as labels with the tract
+    # y_name: actual label name
     for y_label, y_name in enumerate(y_names):
 
         if '_right' in str(y_name):

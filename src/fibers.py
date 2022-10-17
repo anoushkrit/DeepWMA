@@ -428,10 +428,15 @@ class FiberArray:
         label_array = None
         array_name = 'region_label'
         if pointdata.GetNumberOfArrays() > 0:
+            # data at a point IS there then pass, because if there are multiple arrays then point data is not empty
             point_data_array_indices = range(pointdata.GetNumberOfArrays())
+            # number of indices in the point data = number of arrays
             for idx in point_data_array_indices:
                 array = pointdata.GetArray(idx)
+                # choose the array at a particular indices
                 if array.GetName().find(array_name) != -1:
+                    # something with the array name, if the array is given a name -1, we skip otherwise we feed 
+                    # this information of array name
                     label_array = array
 
         if label_array is None:
@@ -439,6 +444,7 @@ class FiberArray:
             return None
 
         for lidx in range(0, self.number_of_fibers):
+            # looping over number of fibers
 
             input_vtk_polydata.GetLines().GetNextCell(line_ptids)
             line_length = line_ptids.GetNumberOfIds()
@@ -459,6 +465,7 @@ class FiberArray:
                 point = inpoints.GetPoint(ptidx)
 
                 self.fiber_array_r[lidx, pidx] = point[0]
+                # self.fiber_array_x[no. of the fiber, ]
                 self.fiber_array_a[lidx, pidx] = point[1]
                 self.fiber_array_s[lidx, pidx] = point[2]
 

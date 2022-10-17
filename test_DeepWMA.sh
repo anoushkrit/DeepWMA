@@ -7,6 +7,10 @@ Slicer=/home/ang/Documents/Slicer-5.0.2/Slicer
 export LD_LIBRARY_PATH=/home/ang/Documents/Slicer-5.0.2/lib/Slicer-5.0/cli-modules/
 export LD_LIBRARY_PATH=/home/ang/Documents/Slicer-5.0.2/lib/Slicer-5.0/:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=/home/ang/Documents/Slicer-5.0.2/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/ang/anaconda3/envs/SupWMA/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/ang/anaconda3/envs/pnlpipe3/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CONDA_PREFIX/lib/
+
 convert_path=/home/ang/Documents/GitHub/SupWMA/conversion/conversion
 
 # refernce files
@@ -18,6 +22,8 @@ mean_b0=100HCP-population-mean-b0.nii.gz
 # Data Folders
 input_folder=/home/ang/Documents/GitHub/DeepWMA/data/${subject_ID}
 output_folder=/home/ang/Documents/GitHub/DeepWMA/data/${subject_ID}
+CNN_model_folder=./SegModels/CNN/
+
 
 # placeholders
 nhdr_data=$path_dwi$patient_id.nhdr
@@ -31,3 +37,6 @@ subject_tract=${input_folder}/${subject_ID}_ukf.vtk
 $BRAINSFitCLI --fixedVolume $atlas_T2 --movingVolume $subject_b0 --linearTransform $output_folder/b0_to_atlasT2.tfm --useRigid --useAffine
 # Extract 
 python ./dlt_extract_tract_feat.py ${output_folder}/${subject_ID}_ukf.vtk $output_folder -outPrefix ${subject_ID} -feature RAS-3D -numPoints 15
+
+
+python ./dlt_test.py ${CNN_model_folder}/cnn_model.h5 -modelLabelName ${CNN_model_folder}/cnn_label_names.h5 $output_folder/${subject_ID}_featMatrix.h5 $output_folder -outPrefix ${subject_ID} -tractVTKfile ${subject_tract}
