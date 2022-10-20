@@ -11,7 +11,7 @@ export LD_LIBRARY_PATH=/home/ang/anaconda3/envs/SupWMA/lib/:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=/home/ang/anaconda3/envs/pnlpipe3/lib/:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CONDA_PREFIX/lib/
 
-convert_path=/home/ang/Documents/GitHub/SupWMA/conversion/conversion
+convert_path=/home/ang/Documents/GitHub/DeepWMA/conversion/conversion
 
 # refernce files
 subject_ID=999999
@@ -33,6 +33,8 @@ subject_tract=${input_folder}/${subject_ID}_ukf.vtk
 
 # convert nii.gz to .nrrd
 (cd ${convert_path}; python3 $convert_path/nhdr_write.py --nifti $path_dwi$mean_b0 --nhdr $nhdr_data)
+# python3 conversion/conversion/nhdr_write.py --nifti $path_dwi$mean_b0 --nhdr $nhdr_data
+
 # Perform BRAINSFit Transformations
 $BRAINSFitCLI --fixedVolume $atlas_T2 --movingVolume $subject_b0 --linearTransform $output_folder/b0_to_atlasT2.tfm --useRigid --useAffine
 # Extract 

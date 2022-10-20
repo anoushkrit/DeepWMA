@@ -220,6 +220,7 @@ if args.tractVTKfile is not None:
     number_of_tracts = np.max(tract_prediction_mask) + 1
     pd_t_list = wma.cluster.mask_all_clusters(pd_whole_tract, tract_prediction_mask, number_of_tracts,
                                               preserve_point_data=False, preserve_cell_data=False, verbose=False)
+    print("------------Here find the pd_t_list----------", pd_t_list)
 
     output_tract_folder = os.path.join(args.outputDir, args.outPrefix + '_prediction_tracts_outlier_removed')
     if not os.path.exists(output_tract_folder):

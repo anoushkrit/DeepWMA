@@ -1,0 +1,14 @@
+name: conversion
+
+channels:
+    - conda-forge
+
+dependencies:
+    - python>=3.0
+    - ipython
+    - numpy
+    - nibabel
+    - plumbum
+    - git
+    - pip:
+        - git+https://github.com/mhe/pynrrd.git
