@@ -93,24 +93,43 @@ print(script_name, params)
 tmp_h5_feat = os.path.join(args.outputDir, args.outPrefix + '_tmp_feature.h5')
 if not os.path.exists(tmp_h5_feat):\
 
-# editing for passing y_prediction.h5 as the input label for training the CNN-simple model
+# editing for scenario where every single feature matrix is mapped to a label
+    # with h5py.File(args.inputFeat, "r") as f:
+    #     deep_wm_features = f['sc_feat'].value
+    #     other_wm_features = f['other_feat'].value
+    #     x_train = np.concatenate((deep_wm_features, other_wm_features), axis=0)
+    #     # x_train = f['feat'].value
+    #     # TODO: what is the SWM feature doing in the DeepWMA feature set
+    #     print(script_name, 'Input SWM feat shape:', deep_wm_features.shape)
+    #     print(script_name, 'Input other fiber fiber shape', other_wm_features.shape)
+    #     print(script_name, 'Input original feat shape:', x_train.shape)
+
     with h5py.File(args.inputFeat, "r") as f:
-        deep_wm_features = f['sc_feat'].value
-        other_wm_features = f['other_feat'].value
-        x_train = np.concatenate((deep_wm_features, other_wm_features), axis=0)
+        deep_wm_features = f['feat'].value
+        x_train = deep_wm_features
+        # other_wm_features = f['other_feat'].value
+        # x_train = np.concatenate((deep_wm_features, other_wm_features), axis=0)
         # x_train = f['feat'].value
         # TODO: what is the SWM feature doing in the DeepWMA feature set
-        print(script_name, 'Input SWM feat shape:', deep_wm_features.shape)
-        print(script_name, 'Input other fiber fiber shape', other_wm_features.shape)
+        print(script_name, 'Input DeepWMA feat shape:', deep_wm_features.shape)
         print(script_name, 'Input original feat shape:', x_train.shape)
 
+# editing for passing y_prediction.h5 as the input label for training the CNN-simple model
+    # with h5py.File(args.inputLabel, "r") as f:
+    #     y_train = f['label_array'].value.astype(int)
+    #     # # y_values is not used
+    #     # y_values = f['label_values'].value
+    #     y_names = f['label_names'].value
+    #     print(script_name, 'Input original y_names:', y_names)
+    #     print(max(y_train))
+
     with h5py.File(args.inputLabel, "r") as f:
-        y_train = f['label_array'].value.astype(int)
-        # # y_values is not used
-        # y_values = f['label_values'].value
-        y_names = f['label_names'].value
-        print(script_name, 'Input original y_names:', y_names)
-        print(max(y_train))
+            y_train = f['label_array'].value.astype(int)
+            # # y_values is not used
+            # y_values = f['label_values'].value
+            y_names = f['label_names'].value
+            print(script_name, 'Input original y_names:', y_names)
+            print(max(y_train))
 
     if args.validationFeat is not None:
         with h5py.File(args.validationFeat, "r") as f:
@@ -132,7 +151,7 @@ if not os.path.exists(tmp_h5_feat):\
                                                                                                         y_train,
                                                                                                         split_rate)
 
-    ''' The folllowing augment steps are for down/up-sample'''
+    ''' The following augment steps are for down/up-sample'''
 
     if args.tract is None:
             if 1:  # dowmsample training data
@@ -179,7 +198,7 @@ if not os.path.exists(tmp_h5_feat):\
     #                                                x_validation=x_validation, idx_data=idx_train,
     #                                                idx_validation=idx_validation)
 
-    ''' The folllowing augment steps are for bilateral '''
+    ''' The following augment steps are for bilateral '''
 
     if params['bilateral_feature']:
         print(script_name, 'Make a bilateral feature for each fiber.')
@@ -215,7 +234,6 @@ else:
         y_validation = f['y_validation'].value
         y_names = f['y_names'].value
 
-print('')
 print('===================================')
 print(script_name, 'Start Training.')
 

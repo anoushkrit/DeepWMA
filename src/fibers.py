@@ -425,7 +425,7 @@ class FiberArray:
         
         # Get data point 
         pointdata = input_vtk_polydata.GetPointData()
-        label_array = None
+        s_array = None
         array_name = 'region_label'
         if pointdata.GetNumberOfArrays() > 0:
             # data at a point IS there then pass, because if there are multiple arrays then point data is not empty

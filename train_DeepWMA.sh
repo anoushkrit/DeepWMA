@@ -14,9 +14,6 @@ train_data=/home/ang/Documents/GitHub/WMA/WMA_tutorial_data/example-UKF-data.vtk
 # mean b0 subject specific 
 subject_b0=${input_folder}/${subject_ID}-dwi_meanb0.nrrd
 
-
-
-
 # Testing this pretrained model
 CNN_model_folder=./SegModels/CNN/
 
@@ -52,7 +49,7 @@ wm_harden_transform.py ${input_folder} $output_folder $Slicer -t $output_folder/
 python ./dlt_extract_tract_feat.py ${output_folder}/${subject_ID}_ukf_l40_f10k.vtp $output_folder -outPrefix ${subject_ID} -feature RAS-3D -numPoints 15
 
 # DeepWMA segmentation
-python ./dlt_test.py ${CNN_model_folder}/cnn_model.h5 -modelLabelName ${CNN_model_folder}/cnn_label_names.h5 $output_folder/${subject_ID}_featMatrix.h5 $output_folder -outPrefix ${subject_ID} -tractVTKfile ${subject_tract}
+python ./unnerve_train.py ${CNN_model_folder}/cnn_model.h5 -modelLabelName ${CNN_model_folder}/cnn_label_names.h5 $output_folder/${subject_ID}_featMatrix.h5 $output_folder -outPrefix ${subject_ID} -tractVTKfile ${subject_tract}
 
 # Clean temp files
-rm -r $output_folder/${subject_ID}_featMatrix.h5 ${output_folder}/${subject_ID}_ukf_l40_f10k.vtp
+# rm -r $output_folder/${subject_ID}_featMatrix.h5 ${output_folder}/${subject_ID}_ukf_l40_f10k.vtp

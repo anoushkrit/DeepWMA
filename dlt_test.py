@@ -69,7 +69,7 @@ parser.add_argument(
     help='The output directory should be a new empty directory. It will be created if needed.')
 
 parser.add_argument(
-    '-modelLabelName', type=str,
+    '-Dataset', type=str,
     help='Label name in the model as an h5 file.')
 
 parser.add_argument(
@@ -119,7 +119,7 @@ params = np.load(args.inputModel.replace('_model.h5', '_params.npy'), allow_pick
 
 # Load label names in the model
 print(script_name, 'Load tracts names along with the model.')
-with h5py.File(args.modelLabelName, "r") as f:
+with h5py.File(args.Dataset, "r") as f:
     y_names_in_model = f['y_names'].value
 
 # Load test data feature
