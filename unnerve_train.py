@@ -24,7 +24,7 @@ session = InteractiveSession(config=config)
 
 # -----------------
 # Parse arguments
-# -----------------
+# ----------------
 parser = argparse.ArgumentParser(
     description="Train a model.",
     epilog="Written by Fan Zhang, fzhang@bwh.harvard.edu")
@@ -213,7 +213,7 @@ if not os.path.exists(tmp_h5_feat):\
         print(script_name, 'Compress label values (from 1 to N) and label names.')
         y_train, y_names, y_validation = tract_feat.compress_labels_and_names(y_train, y_names,
                                                                               y_validation=y_validation)
-        print(script_name, ' ## Compresed feature names:', y_names)
+        # print(script_name, ' ## Compresed feature names:', y_names)
 
     # save labels
     h5_y_name = os.path.join(args.outputDir, args.outPrefix + '_label_names.h5')
@@ -243,7 +243,7 @@ print(script_name, 'y_train shape:', y_train.shape)
 print(script_name, 'x_validation shape:', x_validation.shape)
 print(script_name, 'y_validation shape:', y_validation.shape)
 
-print(script_name, 'y_names:', y_names)
+# print(script_name, 'y_names:', y_names)
 
 num_classes = np.max(y_train).astype(int) + 1
 

@@ -160,7 +160,7 @@ if not os.path.exists(tmp_h5_feat):
     #                                                                                                     y_names,
     #                                                                                                     y_validation=y_validation,
     #                                                                                                     verbose=True)
-    #
+
     #     if args.tract is None:
     #         print(script_name,
     #               'Train a multi-tract model, where each tract contains BOTH true and false positve fibers.')
@@ -223,7 +223,7 @@ print(script_name, 'y_train shape:', y_train.shape)
 print(script_name, 'x_validation shape:', x_validation.shape)
 print(script_name, 'y_validation shape:', y_validation.shape)
 
-print(script_name, 'y_names:', y_names)
+# print(script_name, 'y_names:', y_names)
 
 num_classes = np.max(y_train).astype(int) + 1
 

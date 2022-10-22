@@ -1,55 +1,53 @@
 
+# conda env SupWMA
+# Libraries
 BRAINSFitCLI=/home/ang/Documents/Slicer-5.0.2/lib/Slicer-5.0/cli-modules/BRAINSFit
 Slicer=/home/ang/Documents/Slicer-5.0.2/Slicer
-atlas_T2 = /home/ang/Documents/GitHub/DeepWMA/atlas/100HCP-population-mean-T2.nii.gz
 
-# Training the Model
-# Input VTK file
-train_data=/home/ang/Documents/GitHub/WMA/WMA_tutorial_data/example-UKF-data.vtk
-
-
-# GroundTruthFIle
-
-
-# mean b0 subject specific 
-subject_b0=${input_folder}/${subject_ID}-dwi_meanb0.nrrd
-
-# Testing this pretrained model
-CNN_model_folder=./SegModels/CNN/
-
-# input data
-subject_ID=101410
-
-input_folder=./TestData/${subject_ID}/
-output_folder=./TestData/${subject_ID}/DeepWMAOutput
-mkdir $output_folder
-
-subject_b0=${input_folder}/${subject_ID}-dwi_meanb0.nrrd
-# why is the mean b0, subject specific? 
-subject_tract=${input_folder}/${subject_ID}_ukf_l40_f10k.vtp 
-# example whole brain tractography with fiber length over 40 mm. `wm_preprocess_all.py` can be used to remove short fibers for your own data.
-
-# TODO: delete two lines below or change them to your Slicer module path
-# export the defined environment variable which sets the path that the linker should look into while linking dynamic libraries/shared libraries.
-# export LD_LIBRARY_PATH=/home/victor/alarge/Softwares/Slicer-4.10.2-linux-amd64/lib/Slicer-4.10/cli-modules/
 export LD_LIBRARY_PATH=/home/ang/Documents/Slicer-5.0.2/lib/Slicer-5.0/cli-modules/
 export LD_LIBRARY_PATH=/home/ang/Documents/Slicer-5.0.2/lib/Slicer-5.0/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/ang/Documents/Slicer-5.0.2/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/ang/anaconda3/envs/SupWMA/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/ang/anaconda3/envs/pnlpipe3/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CONDA_PREFIX/lib/
+
+convert_path=/home/ang/Documents/GitHub/DeepWMA/conversion_scripts/conversion
+
+# reference files
+subject_ID=909090
+atlas_T2=/home/ang/Documents/GitHub/DeepWMA/atlas/100HCP-population-mean-T2.nii.gz
+path_dwi=/home/ang/Documents/GitHub/WMA/WMA_tutorial_data/ORG-Atlases-1.1.1/
+mean_b0=100HCP-population-mean-b0.nii.gz
+
+train_data=/home/ang/Documents/GitHub/WMA/WMA_tutorial_data/example-UKF-data.vtk
+
+# Data Folders
+input_folder=/home/ang/Documents/GitHub/DeepWMA/data/${subject_ID}
+output_folder=/home/ang/Documents/GitHub/DeepWMA/data/${subject_ID}
+CNN_model_folder=./SegModels/CNN/
 
 
-# export LD_LIBRARY_PATH=/home/victor/alarge/Softwares/Slicer-4.10.2-linux-amd64/lib/Slicer-4.10/:$LD_LIBRARY_PATH
+# placeholders
+nhdr_data=$path_dwi$patient_id.nhdr
+subject_b0=${input_folder}/${subject_ID}-dwi_meanb0.nrrd
+subject_b0=atlas/100HCP-population-mean-T2.nii.gz # convert to .nrrd
+subject_tract=${input_folder}/${subject_ID}_ukf.vtk
 
-# Volume registration
+# convert nii.gz to .nrrd
+(cd ${convert_path}; python3 $convert_path/nhdr_write.py --nifti $path_dwi$mean_b0 --nhdr $nhdr_data)
+# python3 conversion/conversion/nhdr_write.py --nifti $path_dwi$mean_b0 --nhdr $nhdr_data
+wm_harden_transform.py ${input_folder}/ $output_folder $Slicer -t $output_folder/b0_to_atlasT2.tfm -j 1
+# Perform BRAINSFit Transformations
 $BRAINSFitCLI --fixedVolume $atlas_T2 --movingVolume $subject_b0 --linearTransform $output_folder/b0_to_atlasT2.tfm --useRigid --useAffine
 
-# Transform the vtp models (tractography): 101410_ukf_l40_f10k.vtp in the input folder using transformation obtained from last step
-wm_harden_transform.py ${input_folder} $output_folder $Slicer -t $output_folder/b0_to_atlasT2.tfm -j 1
+# Extract 
+python ./dlt_extract_tract_feat.py ${output_folder}/${subject_ID}_ukf.vtk $output_folder -outPrefix ${subject_ID} -feature RAS-3D -numPoints 15
 
-# No ground truth, no downsampleStep
-# FiberMap computation
-python ./dlt_extract_tract_feat.py ${output_folder}/${subject_ID}_ukf_l40_f10k.vtp $output_folder -outPrefix ${subject_ID} -feature RAS-3D -numPoints 15
+# DeepWMA training 
+# inputFeat=/home/ang/Documents/GitHub/DeepWMA/data/999999/999999_featMatrix.h5
+input_feature=/home/ang/Documents/GitHub/DeepWMA/data/909090/909090_featMatrix.h5
+# input_label=/home/ang/Documents/GitHub/DeepWMA/data/999999/999999_labels.h5
+input_label=/home/ang/Documents/GitHub/DeepWMA/data/909090/909090_labels_new.h5
+output_dir=/home/ang/Documents/GitHub/DeepWMA/data/999999/model_output
 
-# DeepWMA segmentation
-python ./unnerve_train.py ${CNN_model_folder}/cnn_model.h5 -modelLabelName ${CNN_model_folder}/cnn_label_names.h5 $output_folder/${subject_ID}_featMatrix.h5 $output_folder -outPrefix ${subject_ID} -tractVTKfile ${subject_tract}
-
-# Clean temp files
-# rm -r $output_folder/${subject_ID}_featMatrix.h5 ${output_folder}/${subject_ID}_ukf_l40_f10k.vtp
+python ./unnerve_train.py ${input_feature} ${input_label} ${output_dir} -outPrefix ${subject_ID} -architecture 'CNN-simple'
