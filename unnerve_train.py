@@ -144,7 +144,7 @@ if not os.path.exists(tmp_h5_feat):\
         idx_validation = None
 
     else:
-        split_rate = 0.8
+        split_rate = 0.9
 
         print(script_name, 'Spliting data into train and validation, rate:', split_rate)
         x_train, y_train, x_validation, y_validation, idx_train, idx_validation = tract_feat.split_data(x_train,

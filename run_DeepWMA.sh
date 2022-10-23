@@ -12,6 +12,7 @@ Slicer=/home/ang/Documents/Slicer-5.0.2/Slicer
 # BRAINSFitCLI=/home/victor/alarge/Softwares/Slicer-4.10.2-linux-amd64/lib/Slicer-4.10/cli-modules/BRAINSFit
 # Slicer=/home/victor/alarge/Softwares/Slicer-4.10.2-linux-amd64/Slicer
 
+
 BRAINSFitCLI=/home/ang/Documents/Slicer-5.0.2/lib/Slicer-5.0/cli-modules/BRAINSFit
 # atlas_T2=./SegModels/100HCP-population-mean-T2.nii.gz
 atlas_T2 = /home/ang/Documents/GitHub/DeepWMA/atlas/100HCP-population-mean-T2.nii.gz
