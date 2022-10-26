@@ -30,7 +30,7 @@ CNN_model_folder=./SegModels/CNN/
 
 # placeholders
 nhdr_data=$path_dwi$patient_id.nhdr
-subject_b0=${input_folder}/${subject_ID}-dwi_meanb0.nrrd
+# subject_b0=${input_folder}/${subject_ID}-dwi_meanb0.nrrd
 subject_b0=atlas/100HCP-population-mean-T2.nii.gz # convert to .nrrd
 subject_tract=${input_folder}/${subject_ID}_ukf.vtk
 
@@ -49,6 +49,6 @@ python ./dlt_extract_tract_feat.py ${output_folder}/${subject_ID}_ukf.vtk $outpu
 input_feature=/home/ang/Documents/GitHub/DeepWMA/data/909090/909090_featMatrix.h5
 # input_label=/home/ang/Documents/GitHub/DeepWMA/data/999999/999999_labels.h5
 input_label=/home/ang/Documents/GitHub/DeepWMA/data/909090/909090_labels_new.h5
-output_dir=/home/ang/Documents/GitHub/DeepWMA/data/999999/model_output
+output_dir=/home/ang/Documents/GitHub/DeepWMA/data/909090/model_output
 
 python ./unnerve_train.py ${input_feature} ${input_label} ${output_dir} -outPrefix ${subject_ID} -architecture 'CNN-simple'

@@ -315,8 +315,9 @@ def predict(model, x_data, y_data=None, y_name=None, verbose=False):
         #     print(np.unique(y_prediction))
         #     prediction_report = None
         #     con_matrix = None
-        print(type(y_name))
+        # prediction_report = classification_report(y_data, y_prediction, target_names=list(set(y_name)))
         prediction_report = classification_report(y_data, y_prediction, target_names=list(set(y_name)))
+
 
         if verbose:
             print(prediction_report)

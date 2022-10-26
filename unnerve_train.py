@@ -13,6 +13,14 @@ from tensorflow.keras.models import load_model
 
 from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession
+import warnings
+
+def fxn():
+    warnings.warn("deprecated", DeprecationWarning)
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    fxn()
 
 # Assign GPU usage.
 config = ConfigProto()
@@ -91,7 +99,7 @@ else:
 print(script_name, params)
 
 tmp_h5_feat = os.path.join(args.outputDir, args.outPrefix + '_tmp_feature.h5')
-if not os.path.exists(tmp_h5_feat):\
+if not os.path.exists(tmp_h5_feat):
 
 # editing for scenario where every single feature matrix is mapped to a label
     # with h5py.File(args.inputFeat, "r") as f:
@@ -105,7 +113,7 @@ if not os.path.exists(tmp_h5_feat):\
     #     print(script_name, 'Input original feat shape:', x_train.shape)
 
     with h5py.File(args.inputFeat, "r") as f:
-        deep_wm_features = f['feat'].value
+        deep_wm_features = f['feat'][()]
         x_train = deep_wm_features
         # other_wm_features = f['other_feat'].value
         # x_train = np.concatenate((deep_wm_features, other_wm_features), axis=0)
@@ -124,19 +132,19 @@ if not os.path.exists(tmp_h5_feat):\
     #     print(max(y_train))
 
     with h5py.File(args.inputLabel, "r") as f:
-            y_train = f['label_array'].value.astype(int)
+            y_train = f['label_array'][()].astype(int)
             # # y_values is not used
             # y_values = f['label_values'].value
-            y_names = f['label_names'].value
+            y_names = f['label_names'][()]
             print(script_name, 'Input original y_names:', y_names)
             print(max(y_train))
 
     if args.validationFeat is not None:
         with h5py.File(args.validationFeat, "r") as f:
-            x_validation = f['feat'].value
+            x_validation = f['feat'][()]
 
         with h5py.File(args.validationLabel, "r") as f:
-            y_validation = f['label_array'].value.astype(int)
+            y_validation = f['label_array'][()].astype(int)
             # y_value = f['label_values'].value
             # y_names = f['label_names'].value
 
@@ -144,7 +152,7 @@ if not os.path.exists(tmp_h5_feat):\
         idx_validation = None
 
     else:
-        split_rate = 0.9
+        split_rate = 0.99
 
         print(script_name, 'Spliting data into train and validation, rate:', split_rate)
         x_train, y_train, x_validation, y_validation, idx_train, idx_validation = tract_feat.split_data(x_train,
@@ -228,11 +236,11 @@ else:
     # Used only when debugging.
     print(script_name, 'Loading existing tmp feat files....')
     with h5py.File(tmp_h5_feat, "r") as f:
-        x_train = f['x_train'].value
-        y_train = f['y_train'].value
-        x_validation = f['x_validation'].value
-        y_validation = f['y_validation'].value
-        y_names = f['y_names'].value
+        x_train = f['x_train'][()]
+        y_train = f['y_train'][()]
+        x_validation = f['x_validation'][()]
+        y_validation = f['y_validation'][()]
+        y_names = f['y_names'][()]
 
 print('===================================')
 print(script_name, 'Start Training.')

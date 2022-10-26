@@ -723,6 +723,7 @@ def _combine_tracts(y_data, labels_to_combine, combined_name=None, y_names=None,
     # for y_label in all_y_labels:
 
     # when y_data == y_label, the value of y_data at that index is changed to labels_to_combine[-1]
+    # when y_data == y_label, y_data changes to the se
     for y_label in labels_to_combine[:-1]:
         y_data[np.where(y_data == y_label)[0]] = labels_to_combine[-1]
 
