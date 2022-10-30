@@ -39,7 +39,7 @@ convert_path=/home/ang/Documents/GitHub/SupWMA/conversion/conversion
 # Pass the .vtk file in the subject specific parcellation to clusters and the tracts 
 
 
-# Create the inpur training data for SupWMA
+# Create the input training data for SupWMA
 
 
 

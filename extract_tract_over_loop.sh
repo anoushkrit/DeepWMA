@@ -23,7 +23,9 @@ mean_b0=100HCP-population-mean-b0.nii.gz
 # subject specific variables
 
 input_folder=/home/ang/Documents/GitHub/DeepWMA/data/${subject_ID}
-output_folder=/home/ang/Documents/GitHub/DeepWMA/data/${subject_ID}
+# input_folder=/media/ang/Data/unnerve_data/DeepWMA/${subject_ID}
+# output_folder=/home/ang/Documents/GitHub/DeepWMA/data/${subject_ID}
+output_folder=/media/ang/Data/unnerve_data/${subject_ID}
 mkdir $input_folder 
 mkdir $output_folder
 subject_b0=${input_folder}/${subject_ID}-dwi_meanb0.nrrd # TODO: find subject specific b0 if available (outer loop)
@@ -40,12 +42,10 @@ nhdr_data=${input_folder}/${subject_ID}-mean-b0.nhdr
 echo "_______________EXTRACT_FEAT_MATRIX for each TRACT of subject ${subject_ID}____________"
 
 for filename in $path_105HCP/*.vtk; do
-    # $ foo=${string#"$prefix"}
-    # $ foo=${foo%"$suffix"}
     tract_name=${filename#"$path_105HCP/"}
     tract_name=${tract_name%".trk.vtk"}
 
     echo ---------------${tract_name}----
-    # python ./dlt_extract_tract_feat.py ${filename} $output_folder -outPrefix ${subject_ID}_T_${tract_name} -feature RAS-3D -numPoints 15
+    python ./dlt_extract_tract_feat.py ${filename} $output_folder -outPrefix ${subject_ID}_T_${tract_name} -feature RAS-3D -numPoints 15
 
 done

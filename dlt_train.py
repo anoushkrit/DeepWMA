@@ -177,7 +177,7 @@ if not os.path.exists(tmp_h5_feat):
     #                                                x_validation=x_validation, idx_data=idx_train,
     #                                                idx_validation=idx_validation)
 
-    ''' The folllowing augment steps are for bilateral '''
+    ''' The following augment steps are for bilateral '''
 
     if params['bilateral_feature']:
         print(script_name, 'Make a bilateral feature for each fiber.')
