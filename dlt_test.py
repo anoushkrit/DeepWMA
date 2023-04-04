@@ -62,6 +62,10 @@ parser.add_argument(
     'inputModel',
     help='Pretrained network model as an h5 file.')
 parser.add_argument(
+    'modelLabelName',
+    help='Model label names for the pretrained model')
+
+parser.add_argument(
     'inputFeat',
     help='Input tract feature data as an h5 file.')
 parser.add_argument(

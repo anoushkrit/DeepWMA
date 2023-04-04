@@ -26,7 +26,6 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLRO
 # 	Parameters
 # 	----------
 # 	TODO:
-
 # 	"""
 
 #     batch_size = 512
@@ -110,8 +109,8 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLRO
 #     return model
 
 def CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, out_path, data_augmentation=False):
-    """The most simple feature for initial test
 
+    """The most simple feature for initial test
 	Parameters
 	----------
 	TODO: convert to pytorch    
@@ -169,7 +168,9 @@ def CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, out_pa
     model.add(Activation('softmax'))
 
     # initiate RMSprop optimizer
+    # Changing the learning rate a bit
     opt = tf.keras.optimizers.RMSprop(learning_rate=0.0001, decay=1e-6)
+    print("0.0001")
 
     # Let's train the model using RMSprop
     model.compile(loss='categorical_crossentropy',
@@ -180,8 +181,7 @@ def CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, out_pa
     x_validation = x_validation.astype('float32')
 
     earlyStopping = EarlyStopping(monitor='val_accuracy', min_delta=0.00, patience=10, verbose=0, mode='auto')
-    net_save = ModelCheckpoint('./{}/best_weights.h5'.format(out_path), save_best_only=True, monitor='val_accuracy',
-                               mode='auto')
+    net_save = ModelCheckpoint('./{}/best_weights.h5'.format(out_path), save_best_only=True, save_freq = 'epoch', monitor='val_accuracy', mode='auto')
     # reduce_lr_loss = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
 
     if not data_augmentation:
@@ -197,6 +197,10 @@ def CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, out_pa
         print('TBD!')
 
     return model
+
+def Vanilla_Transformers(x_train, y_train, x_validation, y_validation, num_classes, out_path, data_augmentation=False):
+    return
+
 
 
 def CNN_simple_1D(x_train, y_train, x_test, y_test, num_classes, data_augmentation=False):

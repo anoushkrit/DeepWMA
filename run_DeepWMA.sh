@@ -44,7 +44,7 @@ export LD_LIBRARY_PATH=/home/ang/Documents/Slicer-5.0.2/lib/Slicer-5.0/:$LD_LIBR
 # Volume registration
 $BRAINSFitCLI --fixedVolume $atlas_T2 --movingVolume $subject_b0 --linearTransform $output_folder/b0_to_atlasT2.tfm --useRigid --useAffine
 
-# Transform the vtp models (tractography): 101410_ukf_l40_f10k.vtp in the input folder using transformation obtained from last step
+# Harden Transform the vtp models (tractography): 101410_ukf_l40_f10k.vtp in the input folder using transformation obtained from last step
 wm_harden_transform.py ${input_folder} $output_folder $Slicer -t $output_folder/b0_to_atlasT2.tfm -j 1
 
 # No ground truth, no downsampleStep

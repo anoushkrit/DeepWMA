@@ -255,6 +255,7 @@ print(script_name, 'y_validation shape:', y_validation.shape)
 # print(script_name, 'y_names:', y_names)
 # num_classes = np.max(y_org).astype(int) + 1
 num_classes = np.max(y_train).astype(int) + 1
+print(num_classes)
 
 y_train_mat = tf.keras.utils.to_categorical(y_train, num_classes)
 y_validation_mat = tf.keras.utils.to_categorical(y_validation, num_classes)
@@ -267,6 +268,7 @@ if not os.path.exists(output_model_path):
 
         model = nn_model.CNN_simple(x_train, y_train_mat, x_validation, y_validation_mat, num_classes, args.outputDir,
                                     data_augmentation=False)
+        # model = nn_model.CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, args.outputDir, epochs = 50, batch_size = 512, learning_rate = 0.01, data_augmentation=False)
 
     print(script_name, 'Saving trained model in:', args.outputDir)
     model.save(os.path.join(args.outputDir, args.outPrefix + '_last_weights.h5'))
