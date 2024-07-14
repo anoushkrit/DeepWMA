@@ -111,7 +111,7 @@ def feat_RASF(pd_tract, number_of_points=15):
     return feat
 
 
-def feat_RAS_3D(pd_tract, number_of_points=15, repeat_time=15):
+def feat_RAS_3D(pd_tract, number_of_points=15, repeat_time=15, exists_feat_RAS=True):
     """The most simple feature for initial test
 
 	Parameters
@@ -119,9 +119,9 @@ def feat_RAS_3D(pd_tract, number_of_points=15, repeat_time=15):
 	TODO:
 
 	"""
-
-    feat = feat_RAS(pd_tract, number_of_points=number_of_points) # size: [number of fibers, points on each fiber, RAS (three dimensions)]
-
+    if not exists_feat_RAS: 
+        feat = feat_RAS(pd_tract, number_of_points=number_of_points) # size: [number of fibers, points on each fiber, RAS (three dimensions)]
+    feat = pd_tract
     feat_1221_2112_repeat = _feat_to_3D(feat, repeat_time=repeat_time)
 
     return feat_1221_2112_repeat
