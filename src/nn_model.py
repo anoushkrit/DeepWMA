@@ -20,13 +20,100 @@ from tensorflow.keras.layers import Conv1D, GlobalMaxPooling1D
 from tensorflow.keras.preprocessing import sequence
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
+# def CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, out_path, data_augmentation=False):
+#     """The most simple feature for initial test
+
+# 	Parameters
+# 	----------
+# 	TODO:
+# 	"""
+
+#     batch_size = 512
+#     epochs = 100
+#     data_augmentation = False
+
+#     model = Sequential()
+#     model.add(Conv2D(32, (3, 3), padding='same', input_shape=x_train.shape[1:]))
+#     model.add(Activation('relu'))
+#     model.add(Conv2D(32, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(MaxPooling2D(pool_size=(2, 2)))
+#     model.add(Dropout(0.25))
+
+#     model.add(Conv2D(64, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(Conv2D(64, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(MaxPooling2D(pool_size=(2, 2)))
+#     model.add(Dropout(0.25))
+
+#     model.add(Conv2D(128, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(Conv2D(128, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(MaxPooling2D(pool_size=(2, 2)))
+
+#     model.add(Conv2D(256, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(Conv2D(256, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(MaxPooling2D(pool_size=(2, 2)))
+
+#     model.add(Conv2D(512, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(Conv2D(512, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(MaxPooling2D(pool_size=(2, 2)))
+
+#     model.add(Flatten())
+#     model.add(Dense(128))
+#     model.add(Activation('relu'))
+#     model.add(Dropout(0.2))
+#     model.add(Dense(256))
+#     model.add(Activation('relu'))
+#     model.add(Dropout(0.2))
+#     model.add(Dense(512))
+#     model.add(Activation('relu'))
+#     model.add(Dropout(0.2))
+#     model.add(Dense(num_classes))
+#     model.add(Activation('softmax'))
+
+#     # initiate RMSprop optimizer
+#     opt = tf.keras.optimizers.RMSprop(lr=0.0001, decay=1e-6)
+
+#     # Let's train the model using RMSprop
+#     model.compile(loss='categorical_crossentropy',
+#                   optimizer=opt,
+#                   metrics=['accuracy'])
+#     print(model.summary())
+#     x_train = x_train.astype('float32')
+#     x_validation = x_validation.astype('float32')
+
+#     earlyStopping = EarlyStopping(monitor='val_accuracy', min_delta=0.00, patience=10, verbose=0, mode='auto')
+#     net_save = ModelCheckpoint('./{}/best_weights.h5'.format(out_path), save_best_only=True, monitor='val_accuracy',
+#                                mode='auto')
+#     # reduce_lr_loss = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
+
+#     if not data_augmentation:
+#         print('Not using data augmentation.')
+#         model.fit(x_train, y_train,
+#                   batch_size=batch_size,
+#                   epochs=epochs,
+#                   validation_data=(x_validation, y_validation),
+#                   callbacks=[earlyStopping, net_save],
+#                   shuffle=True)
+#     else:
+#         print('Using real-time data augmentation.')
+#         print('TBD!')
+
+#     return model
 
 def CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, out_path, data_augmentation=False):
-    """The most simple feature for initial test
 
+    """The most simple feature for initial test
 	Parameters
 	----------
-	TODO:
+	TODO: convert to pytorch    
 
 	"""
 
@@ -65,7 +152,7 @@ def CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, out_pa
     model.add(Activation('relu'))
     model.add(Conv2D(512, (3, 3), padding='same'))
     model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(MaxPooling2D(pool_size=(1, 1)))
 
     model.add(Flatten())
     model.add(Dense(128))
@@ -81,7 +168,9 @@ def CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, out_pa
     model.add(Activation('softmax'))
 
     # initiate RMSprop optimizer
-    opt = tf.keras.optimizers.RMSprop(lr=0.0001, decay=1e-6)
+    # Changing the learning rate a bit
+    opt = tf.keras.optimizers.RMSprop(learning_rate=0.0001, decay=1e-6)
+    print("0.0001")
 
     # Let's train the model using RMSprop
     model.compile(loss='categorical_crossentropy',
@@ -92,8 +181,7 @@ def CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, out_pa
     x_validation = x_validation.astype('float32')
 
     earlyStopping = EarlyStopping(monitor='val_accuracy', min_delta=0.00, patience=10, verbose=0, mode='auto')
-    net_save = ModelCheckpoint('./{}/best_weights.h5'.format(out_path), save_best_only=True, monitor='val_accuracy',
-                               mode='auto')
+    net_save = ModelCheckpoint('./{}/best_weights.h5'.format(out_path), save_best_only=True, save_freq = 'epoch', monitor='val_accuracy', mode='auto')
     # reduce_lr_loss = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
 
     if not data_augmentation:
@@ -109,6 +197,10 @@ def CNN_simple(x_train, y_train, x_validation, y_validation, num_classes, out_pa
         print('TBD!')
 
     return model
+
+def Vanilla_Transformers(x_train, y_train, x_validation, y_validation, num_classes, out_path, data_augmentation=False):
+    return
+
 
 
 def CNN_simple_1D(x_train, y_train, x_test, y_test, num_classes, data_augmentation=False):
@@ -205,25 +297,44 @@ def CNN_simple_1D(x_train, y_train, x_test, y_test, num_classes, data_augmentati
 
 
 def predict(model, x_data, y_data=None, y_name=None, verbose=False):
-    y_prediction = model.predict_classes(x_data)
+    # y_prediction = model.predict_classes(x_data) # deprication warning
+    # If binary Classification (non-deprecated)
+    # y_prediction = (model.predict(x_data) > 0.5).astype("int32")
+    y_prediction = np.argmax(model.predict(x_data), axis=-1)
 
     if y_data is not None:
 
-        try:
-            prediction_report = classification_report(y_data, y_prediction, target_names=y_name)
+        # try:
+        #     prediction_report = classification_report(y_data, y_prediction, target_names=y_name)
 
-            if verbose:
-                print(prediction_report)
+        #     if verbose:
+        #         print(prediction_report)
 
-            con_matrix = confusion_matrix(y_data, y_prediction)
-            if verbose:
-                print(con_matrix)
+        #     con_matrix = confusion_matrix(y_data, y_prediction)
+        #     if verbose:
+        #         print(con_matrix)
 
-        except ValueError:
-            print('[Warning]: There is missing tract')
-            print(np.unique(y_prediction))
-            prediction_report = None
-            con_matrix = None
+        # except ValueError:
+        #     print('[Warning]: There is missing tract')
+        #     print(np.unique(y_prediction))
+        #     prediction_report = None
+        #     con_matrix = None
+        # prediction_report = classification_report(y_data, y_prediction, target_names=list(set(y_name)))
+        prediction_report = classification_report(y_data, y_prediction, target_names=list(set(y_name)))
+
+
+        if verbose:
+            print(prediction_report)
+
+        con_matrix = confusion_matrix(y_data, y_prediction)
+        if verbose:
+            print(con_matrix)
+
+        # except ValueError:
+        #     print('[Warning]: There is missing tract')
+        #     print(np.unique(y_prediction))
+        #     prediction_report = None
+        #     con_matrix = None
 
     else:
         prediction_report = None

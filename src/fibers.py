@@ -168,7 +168,7 @@ class FiberArray:
         # these are the DeepWMAOutput point indices (0-based)
         ptlist = []
         for ptidx in range(0, DeepWMAOutput_line_length):
-        #print(ptidx*step)
+        #print((ptidx*step))
             ptlist.append(ptidx * step)
 
         # test
@@ -177,11 +177,11 @@ class FiberArray:
             #test = ((DeepWMAOutput_line_length - 1) * step == input_line_length - 1)
             test = (round(ptidx*step) == input_line_length-1)
             if not test:
-                print "<fibers.py> ERROR: fiber numbers don't add up."
-                print step
-                print input_line_length
-                print DeepWMAOutput_line_length
-                print test
+                print ("<fibers.py> ERROR: fiber numbers don't add up.")
+                print (step)
+                print (input_line_length)
+                print (DeepWMAOutput_line_length)
+                print (test)
                 raise AssertionError
 
         return ptlist
@@ -253,7 +253,7 @@ class FiberArray:
                     (fibers.number_left_hem + fibers.number_right_hem \
                          + fibers.number_commissure)
                 if not test:
-                    print "<fibers.py> ERROR: fiber numbers don't add up."
+                    print ("<fibers.py> ERROR: fiber numbers don't add up.")
                     raise AssertionError
 
         return fibers
@@ -315,7 +315,7 @@ class FiberArray:
                     (fibers.number_left_hem + fibers.number_right_hem \
                          + fibers.number_commissure)
                 if not test:
-                    print "<fibers.py> ERROR: fiber numbers don't add up."
+                    print ("<fibers.py> ERROR: fiber numbers don't add up.")
                     raise AssertionError
 
         return fibers
@@ -340,8 +340,7 @@ class FiberArray:
         self.number_of_fibers = input_vtk_polydata.GetNumberOfLines()
 
         if self.verbose:
-            print "<fibers.py> Converting polydata to array representation. Lines:", \
-                self.number_of_fibers
+            print ("<fibers.py> Converting polydata to array representation. Lines:", self.number_of_fibers)
 
         # allocate array number of lines by line length
         self.fiber_array_r = numpy.zeros((self.number_of_fibers,
@@ -363,8 +362,8 @@ class FiberArray:
 
             if self.verbose:
                 if lidx % 100 == 0:
-                    print "<fibers.py> Line:", lidx, "/", self.number_of_fibers
-                    print "<fibers.py> number of points:", line_length
+                    print ("<fibers.py> Line:", lidx, "/", self.number_of_fibers)
+                    print ("<fibers.py> number of points:", line_length)
 
             # loop over the indices that we want and get those points
             pidx = 0
@@ -405,8 +404,7 @@ class FiberArray:
         self.number_of_fibers = input_vtk_polydata.GetNumberOfLines()
 
         if self.verbose:
-            print "<fibers.py> Converting polydata to array representation. Lines:", \
-                self.number_of_fibers
+            print ("<fibers.py> Converting polydata to array representation. Lines:", self.number_of_fibers)
 
         # allocate array number of lines by line length
         self.fiber_array_r = numpy.zeros((self.number_of_fibers,
@@ -427,28 +425,34 @@ class FiberArray:
         
         # Get data point 
         pointdata = input_vtk_polydata.GetPointData()
-        label_array = None
+        s_array = None
         array_name = 'region_label'
         if pointdata.GetNumberOfArrays() > 0:
+            # data at a point IS there then pass, because if there are multiple arrays then point data is not empty
             point_data_array_indices = range(pointdata.GetNumberOfArrays())
+            # number of indices in the point data = number of arrays
             for idx in point_data_array_indices:
                 array = pointdata.GetArray(idx)
+                # choose the array at a particular indices
                 if array.GetName().find(array_name) != -1:
+                    # something with the array name, if the array is given a name -1, we skip otherwise we feed 
+                    # this information of array name
                     label_array = array
 
         if label_array is None:
-            print array_name, 'is not found.'
+            print (array_name, 'is not found.')
             return None
 
         for lidx in range(0, self.number_of_fibers):
+            # looping over number of fibers
 
             input_vtk_polydata.GetLines().GetNextCell(line_ptids)
             line_length = line_ptids.GetNumberOfIds()
 
             if self.verbose:
                 if lidx % 100 == 0:
-                    print "<fibers.py> Line:", lidx, "/", self.number_of_fibers
-                    print "<fibers.py> number of points:", line_length
+                    print ("<fibers.py> Line:", lidx, "/", self.number_of_fibers)
+                    print ("<fibers.py> number of points:", line_length)
 
             # loop over the indices that we want and get those points
             pidx = 0
@@ -461,6 +465,7 @@ class FiberArray:
                 point = inpoints.GetPoint(ptidx)
 
                 self.fiber_array_r[lidx, pidx] = point[0]
+                # self.fiber_array_x[no. of the fiber, ]
                 self.fiber_array_a[lidx, pidx] = point[1]
                 self.fiber_array_s[lidx, pidx] = point[2]
 
@@ -492,8 +497,7 @@ class FiberArray:
         self.number_of_fibers = input_vtk_polydata.GetNumberOfLines()
 
         if self.verbose:
-            print "<fibers.py> Converting polydata to array representation. Lines:", \
-                self.number_of_fibers
+            print ("<fibers.py> Converting polydata to array representation. Lines:", self.number_of_fibers)
 
         # allocate array number of lines by line length
         self.fiber_array_r = numpy.zeros((self.number_of_fibers,
@@ -528,7 +532,7 @@ class FiberArray:
                     label_array_cur = array
 
         if label_array_cur is None:
-            print array_name, 'is not found.'
+            print (array_name, 'is not found.')
             return None
 
         label_array_tor = None
@@ -541,7 +545,7 @@ class FiberArray:
                     label_array_tor = array
 
         if label_array_tor is None:
-            print array_name, 'is not found.'
+            print (array_name, 'is not found.')
             return None
 
         for lidx in range(0, self.number_of_fibers):
@@ -551,8 +555,8 @@ class FiberArray:
 
             if self.verbose:
                 if lidx % 100 == 0:
-                    print "<fibers.py> Line:", lidx, "/", self.number_of_fibers
-                    print "<fibers.py> number of points:", line_length
+                    print ("<fibers.py> Line:", lidx, "/", self.number_of_fibers)
+                    print ("<fibers.py> number of points:", line_length)
 
             # loop over the indices that we want and get those points
             pidx = 0
@@ -625,7 +629,7 @@ class FiberArray:
                 (self.number_left_hem + self.number_right_hem \
                      + self.number_commissure)
             if not test:
-                print "<fibers.py> ERROR: fiber numbers don't add up."
+                print ("<fibers.py> ERROR: fiber numbers don't add up.")
                 raise AssertionError
 
     def convert_to_polydata(self):

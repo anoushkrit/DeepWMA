@@ -26,6 +26,8 @@ if CPU:
 
     num_cores = 4
 
+    # protocol message for Tensorflow
+
     config = ConfigProto(intra_op_parallelism_threads=num_cores,
                             inter_op_parallelism_threads=num_cores,
                             allow_soft_placement=True,
@@ -60,6 +62,10 @@ parser.add_argument(
     'inputModel',
     help='Pretrained network model as an h5 file.')
 parser.add_argument(
+    'modelLabelName',
+    help='Model label names for the pretrained model')
+
+parser.add_argument(
     'inputFeat',
     help='Input tract feature data as an h5 file.')
 parser.add_argument(
@@ -67,7 +73,7 @@ parser.add_argument(
     help='The output directory should be a new empty directory. It will be created if needed.')
 
 parser.add_argument(
-    '-modelLabelName', type=str,
+    '-Dataset', type=str,
     help='Label name in the model as an h5 file.')
 
 parser.add_argument(
@@ -101,6 +107,7 @@ if not os.path.exists(args.inputFeat):
 if args.inputLabel is None:
     print(script_name, "No input label is provided. Will perform prediction only.")
 elif not os.path.exists(args.inputLabel):
+  
     print(script_name, "Error: Input label ", args.inputLabel, "does not exist.")
     exit()
 
@@ -116,7 +123,7 @@ params = np.load(args.inputModel.replace('_model.h5', '_params.npy'), allow_pick
 
 # Load label names in the model
 print(script_name, 'Load tracts names along with the model.')
-with h5py.File(args.modelLabelName, "r") as f:
+with h5py.File(args.Dataset, "r") as f:
     y_names_in_model = f['y_names'].value
 
 # Load test data feature
@@ -160,7 +167,7 @@ if params['bilateral_feature']:
 
 # Perform predition of multiple tracts
 
-print('')
+print('') 
 print('===================================')
 print('')
 print(script_name, 'Start multi-tract prediction.')
@@ -217,6 +224,7 @@ if args.tractVTKfile is not None:
     number_of_tracts = np.max(tract_prediction_mask) + 1
     pd_t_list = wma.cluster.mask_all_clusters(pd_whole_tract, tract_prediction_mask, number_of_tracts,
                                               preserve_point_data=False, preserve_cell_data=False, verbose=False)
+    print("------------Here find the pd_t_list----------", pd_t_list)
 
     output_tract_folder = os.path.join(args.outputDir, args.outPrefix + '_prediction_tracts_outlier_removed')
     if not os.path.exists(output_tract_folder):
@@ -224,7 +232,7 @@ if args.tractVTKfile is not None:
 
     for t_idx in range(len(pd_t_list)):
         pd_t = pd_t_list[t_idx]
-
+    
         if y_names_in_model is not None:
             fname_t = os.path.join(output_tract_folder, y_names_in_model[t_idx].decode('UTF-8') + '.vtp')
         else:

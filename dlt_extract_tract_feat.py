@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument(
     'inputVTK',
-    help='input tractography data as vtkPolyData file(s).')
+    help='input tractography data as vtkPolyData file(s).') 
 parser.add_argument(
     'outputDir',
     help='The output directory should be a new empty directory. It will be created if needed.')
@@ -34,7 +34,7 @@ parser.add_argument(
     help='Number of points per fiber to extract feature.')
 parser.add_argument(
     '-numRepeats', action="store", type=int, default=15,
-    help='Number of repiteation times.')
+    help='Number of repetiton times.')
 
 parser.add_argument(
     '-downsampleStep', action="store", type=int,
@@ -42,11 +42,13 @@ parser.add_argument(
 parser.add_argument(
     '-groundTruthLabel', action="store", type=str,
     help='Path to the ground truth label file. Should be provided when downsample is used.')
+    # what does downsample do? 
 
 args = parser.parse_args()
 
 script_name = '<extract_tract_feat>'
 
+# test cases for file paths
 if not os.path.exists(args.inputVTK):
     print(script_name, "Error: Input tractography ", args.inputVTK, "does not exist.")
     exit()
@@ -58,7 +60,8 @@ if not os.path.exists(args.outputDir):
 print(script_name, 'Reading input tractography:', args.inputVTK)
 pd_tract = wma.io.read_polydata(args.inputVTK)
 
-print(script_name, 'Computing feauture:', args.feature)
+# RAS feature used in the paper, other features can be extracted to increase
+print(script_name, 'Computing feature:', args.feature)
 
 if args.feature == 'RAS':
 
@@ -66,6 +69,7 @@ if args.feature == 'RAS':
 
     # Reshape from 3D (num of fibers, num of points, num of features) to 4D (num of fibers, num of points, num of features, 1)
     # The 4D array considers the input has only one channel (depth = 1)
+    
     feat_shape = np.append(feat_RAS.shape, 1)
     feat = np.reshape(feat_RAS, feat_shape)
 
@@ -124,6 +128,8 @@ elif args.feature == 'CurvTors':
 print(type(feat))
 
 print(script_name, 'Feature matrix shape:', feat.shape)
+
+# where can we find the find the groundTruthLabel?, is it a file name containing .h5 file?
 
 if args.groundTruthLabel is not None:
     with h5py.File(args.groundTruthLabel, "r") as f:

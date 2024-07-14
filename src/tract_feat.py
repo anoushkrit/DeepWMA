@@ -531,7 +531,8 @@ def bilateralize_feature_OLD(y_names, y_data, x_data, fliped_copy=False):
 def combine_tract_subdiviations_and_keep_outlier_tracts(y_data, y_names, y_validation=None, verbose=False):
     # others
     labels_to_combine = [22, 58, 74, 111, 114,
-                         151]  # ['T_FalsePositive' 'T_O_FalsePositive' 'T_O_Partial' 'T_O_Unclassified'  'T_Partial' 'T_Unclassified']
+                         151]  
+                         # ['T_FalsePositive' 'T_O_FalsePositive' 'T_O_Partial' 'T_O_Unclassified'  'T_Partial' 'T_Unclassified']
 
     y_data, y_names = _combine_tracts(y_data, labels_to_combine, combined_name='T_Others', y_names=y_names,
                                       verbose=verbose)
@@ -569,6 +570,7 @@ def combine_tract_subdiviations_and_keep_outlier_tracts(y_data, y_names, y_valid
         y_validation, _ = _combine_tracts(y_validation, labels_to_combine)
 
     # CBLM tracts
+    # what are these CBlm tracts
     labels_to_combine = [29, 31]  # CBLM left
 
     y_data, y_names = _combine_tracts(y_data, labels_to_combine, combined_name='T_CBLM_left', y_names=y_names,
@@ -601,7 +603,8 @@ def combine_tract_subdiviations_and_keep_outlier_tracts(y_data, y_names, y_valid
 def combine_tract_subdiviations_and_merge_outliers(y_data, y_names, y_validation=None, verbose=False):
     # Others
     labels_to_combine = range(36, 112) + [22, 58, 74, 111, 114,
-                                          151]  # All T_O_* tacts and ['T_FalsePositive' 'T_O_FalsePositive' 'T_O_Partial' 'T_O_Unclassified'  'T_Partial' 'T_Unclassified']
+                                          151]  
+    # All T_O_* tacts and ['T_FalsePositive' 'T_O_FalsePositive' 'T_O_Partial' 'T_O_Unclassified'  'T_Partial' 'T_Unclassified']
 
     y_data, y_names = _combine_tracts(y_data, labels_to_combine, combined_name='T_Others', y_names=y_names,
                                       verbose=verbose)
@@ -660,6 +663,10 @@ def combine_truepositive_and_falsepositive(y_data, y_names, y_validation=None, v
 
 
 def bilateralize_feature(y_data, y_names, y_validation=None, verbose=False):
+    """Combining left part and right part of the tracts (where left and right mean the brain hemispheres)
+    """
+    # y_label: numbers associated as labels with the tract
+    # y_name: actual label name
     for y_label, y_name in enumerate(y_names):
 
         if '_right' in str(y_name):
@@ -716,6 +723,7 @@ def _combine_tracts(y_data, labels_to_combine, combined_name=None, y_names=None,
     # for y_label in all_y_labels:
 
     # when y_data == y_label, the value of y_data at that index is changed to labels_to_combine[-1]
+    # when y_data == y_label, y_data changes to the se
     for y_label in labels_to_combine[:-1]:
         y_data[np.where(y_data == y_label)[0]] = labels_to_combine[-1]
 
